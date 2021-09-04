@@ -80,5 +80,4 @@ def get_model_ct(model):
 def get_facet_field_name(fieldname):
     if fieldname in [ID, DJANGO_ID, DJANGO_CT]:
         return fieldname
-
-    return "%s_exact" % fieldname
+    return fieldname
