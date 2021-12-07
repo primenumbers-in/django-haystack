@@ -18,6 +18,7 @@ from haystack.models import SearchResult
 from haystack.utils import get_identifier, get_model_ct
 from haystack.utils import log as logging
 from haystack.utils.app_loading import haystack_get_model
+import re
 
 try:
     from pysolr import Solr, SolrError
@@ -305,10 +306,15 @@ class SolrSearchBackend(BaseSearchBackend):
                 )
 
         if query_facets is not None:
-            kwargs["facet"] = "on"
-            kwargs["facet.query"] = [
-                "%s:%s" % (field, value) for field, value in query_facets
-            ]
+            kwargs['facet'] = 'on'
+            queries = []
+            for field, value in query_facets:
+                clean_field = re.sub("\{.*\}", '', field)
+                if not clean_field:  # field contains only exclude but no field was passed
+                    queries.append("%s" % (str(field) + str(value)))
+                else:
+                    queries.append("%s:%s" % (field, value))
+            kwargs['facet.query'] = queries
 
         if limit_to_registered_models is None:
             limit_to_registered_models = getattr(
