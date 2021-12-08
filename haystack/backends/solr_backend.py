@@ -278,7 +278,6 @@ class SolrSearchBackend(BaseSearchBackend):
                     kwargs["facet.field"].append('{!ex=%s}' % facets[facet_field].get('exclude') + facet_field)
                 else:
                     kwargs["facet.field"].append(facet_field)
-            kwargs["facet.field"] = facets.keys()
 
             for facet_field, options in facets.items():
                 for key, value in options.items():
