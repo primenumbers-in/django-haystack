@@ -272,6 +272,12 @@ class SolrSearchBackend(BaseSearchBackend):
 
         if facets is not None:
             kwargs["facet"] = "on"
+            kwargs["facet.field"] = []
+            for facet_field in facets:
+                if facets[facet_field].get('exclude'):
+                    kwargs["facet.field"].append('{!ex=%s}' % facets[facet_field].get('exclude') + facet_field)
+                else:
+                    kwargs["facet.field"].append(facet_field)
             kwargs["facet.field"] = facets.keys()
 
             for facet_field, options in facets.items():
@@ -282,7 +288,13 @@ class SolrSearchBackend(BaseSearchBackend):
 
         if date_facets is not None:
             kwargs["facet"] = "on"
-            kwargs["facet.%s" % self.date_facet_field] = date_facets.keys()
+            kwargs["facet.%s" % self.date_facet_field] = []
+            for facet_field in date_facets:
+                if date_facets[facet_field].get('exclude'):
+                    kwargs["facet.%s" % self.date_facet_field].append(
+                        '{!ex=%s}' % date_facets[facet_field].get('exclude') + facet_field)
+                else:
+                    kwargs["facet.%s" % self.date_facet_field].append(facet_field)
             kwargs["facet.%s.other" % self.date_facet_field] = "none"
 
             for key, value in date_facets.items():

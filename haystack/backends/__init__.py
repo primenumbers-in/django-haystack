@@ -942,7 +942,7 @@ class BaseSearchQuery:
         )
         self.facets[field_name] = options.copy()
 
-    def add_date_facet(self, field, start_date, end_date, gap_by, gap_amount=1):
+    def add_date_facet(self, field, start_date, end_date, gap_by, gap_amount=1, exclude=None):
         """Adds a date-based facet on a field."""
         from haystack import connections
 
@@ -957,6 +957,7 @@ class BaseSearchQuery:
             "end_date": end_date,
             "gap_by": gap_by,
             "gap_amount": gap_amount,
+            "exclude": exclude
         }
         self.date_facets[
             connections[self._using].get_unified_index().get_facet_fieldname(field)

@@ -446,17 +446,19 @@ class SearchQuerySet:
         clone.query.add_distance(field, point)
         return clone
 
-    def date_facet(self, field, start_date, end_date, gap_by, gap_amount=1):
+    def date_facet(self, field, start_date, end_date, gap_by, gap_amount=1, exclude=None):
         """Adds faceting to a query for the provided field by date."""
         clone = self._clone()
         clone.query.add_date_facet(
-            field, start_date, end_date, gap_by, gap_amount=gap_amount
+            field, start_date, end_date, gap_by, gap_amount=gap_amount, exclude=exclude
         )
         return clone
 
-    def query_facet(self, field, query):
+    def query_facet(self, field, query, exclude=None):
         """Adds faceting to a query for the provided field with a custom query."""
         clone = self._clone()
+        if exclude:
+            field = '{!ex=%s}' % exclude + field
         clone.query.add_query_facet(field, query)
         return clone
 
