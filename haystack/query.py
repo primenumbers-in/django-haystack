@@ -418,8 +418,10 @@ class SearchQuerySet:
         clone.query.add_dwithin(field, point, distance)
         return clone
 
-    def stats(self, field):
+    def stats(self, field, tag=None):
         """Adds stats to a query for the provided field."""
+        if tag:
+            field = '{!tag=%s}' % tag + field
         return self.stats_facet(field, facet_fields=None)
 
     def stats_facet(self, field, facet_fields=None):
@@ -458,7 +460,7 @@ class SearchQuerySet:
         clone.query.add_query_facet(field, query)
         return clone
 
-    def narrow(self, query):
+    def narrow(self, query, tag):
         """Pushes existing facet choices into the search."""
 
         if isinstance(query, SQ):
@@ -468,6 +470,8 @@ class SearchQuerySet:
             query = query.as_query_string(empty_query.build_query_fragment)
 
         clone = self._clone()
+        if tag:
+            query = '{!tag=%s}' % tag + query
         clone.query.add_narrow_query(query)
         return clone
 
