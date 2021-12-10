@@ -462,7 +462,7 @@ class SearchQuerySet:
         clone.query.add_query_facet(field, query)
         return clone
 
-    def narrow(self, query, tag):
+    def narrow(self, query, tag=None):
         """Pushes existing facet choices into the search."""
 
         if isinstance(query, SQ):
