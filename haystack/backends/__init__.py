@@ -147,6 +147,7 @@ class BaseSearchBackend:
         models=None,
         limit_to_registered_models=None,
         result_class=None,
+        raw_query=None,
         **extra_kwargs
     ):
         # A convenience method most backends should include in order to make
@@ -504,6 +505,7 @@ class BaseSearchQuery:
         self.spelling_query = None
         self.result_class = SearchResult
         self.stats = {}
+        self.raw_query = []
         from haystack import connections
 
         self._using = using
@@ -579,6 +581,9 @@ class BaseSearchQuery:
 
         if self.models:
             kwargs["models"] = self.models
+
+        if self.raw_query:
+            kwargs["raw_query"] = self.raw_query
 
         return kwargs
 
@@ -982,6 +987,9 @@ class BaseSearchQuery:
         """
         self.narrow_queries.add(query)
 
+    def add_raw_query(self, raw_query_function, rew_query_value):
+        self.raw_query.append({raw_query_function: rew_query_value})
+
     def set_result_class(self, klass):
         """
         Sets the result class to use for results.
@@ -1058,6 +1066,7 @@ class BaseSearchQuery:
         clone.date_facets = self.date_facets.copy()
         clone.query_facets = self.query_facets[:]
         clone.narrow_queries = self.narrow_queries.copy()
+        clone.raw_query = self.raw_query.copy()
         clone.start_offset = self.start_offset
         clone.end_offset = self.end_offset
         clone.result_class = self.result_class

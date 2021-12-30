@@ -203,6 +203,7 @@ class SolrSearchBackend(BaseSearchBackend):
         result_class=None,
         stats=None,
         collate=None,
+        raw_query=None,
         **extra_kwargs
     ):
 
@@ -401,6 +402,14 @@ class SolrSearchBackend(BaseSearchBackend):
 
         if extra_kwargs:
             kwargs.update(extra_kwargs)
+
+        if raw_query:
+            for raw_query_dict in raw_query:
+                for query_function, query_value in raw_query_dict.items():
+                    if query_function in kwargs and isinstance(kwargs.get(query_function), list):
+                        kwargs[query_function].append(query_value)
+                    else:
+                        kwargs[query_function] = [query_value]
 
         return kwargs
 
@@ -960,6 +969,9 @@ class SolrSearchQuery(BaseSearchQuery):
 
         if self.stats:
             search_kwargs["stats"] = self.stats
+
+        if self.raw_query:
+            search_kwargs["raw_query"] = self.raw_query
 
         return search_kwargs
 

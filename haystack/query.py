@@ -462,6 +462,14 @@ class SearchQuerySet:
         clone.query.add_query_facet(field, query)
         return clone
 
+    def raw_query(self, query_function, query_value):
+        """
+        Allows raw query to be used.
+        """
+        clone = self._clone()
+        clone.query.add_raw_query(query_function, query_value)
+        return clone
+
     def narrow(self, query, tag=None):
         """Pushes existing facet choices into the search."""
 
