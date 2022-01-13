@@ -513,6 +513,9 @@ class SolrSearchBackend(BaseSearchBackend):
                 "dates": raw_results.facets.get("facet_dates", {}),
                 "queries": raw_results.facets.get("facet_queries", {}),
                 "ranges": raw_results.facets.get("facet_ranges", {}),
+                "pivot": raw_results.facets.get("facet_pivot", {}),
+                "intervals": raw_results.facets.get("facet_intervals", {}),
+                "heatmap": raw_results.facets.get("facet_heatmap", {})
             }
 
             for key in ["fields"]:
