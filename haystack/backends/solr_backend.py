@@ -518,6 +518,9 @@ class SolrSearchBackend(BaseSearchBackend):
                 "heatmap": raw_results.facets.get("facet_heatmap", {})
             }
 
+            if "facets" in raw_results.raw_response:
+                facets["facets"] = raw_results.raw_response["facets"]
+
             for key in ["fields"]:
                 for facet_field in facets[key]:
                     # Convert to a two-tuple, as Solr's json format returns a list of
