@@ -631,6 +631,7 @@ class SolrSearchBackend(BaseSearchBackend):
             "facets": facets,
             "spelling_suggestion": spelling_suggestion,
             "spelling_suggestions": spelling_suggestions,
+            'raw_response': raw_results.raw_response
         }
 
     def extract_spelling_suggestions(self, raw_results):
@@ -996,6 +997,7 @@ class SolrSearchQuery(BaseSearchQuery):
         self._facet_counts = self.post_process_facets(results)
         self._stats = results.get("stats", {})
         self._spelling_suggestion = results.get("spelling_suggestion", None)
+        self._results_processed = results
 
     def run_mlt(self, **kwargs):
         """Builds and executes the query. Returns a list of search results."""
