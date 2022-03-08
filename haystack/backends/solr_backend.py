@@ -631,7 +631,7 @@ class SolrSearchBackend(BaseSearchBackend):
             "facets": facets,
             "spelling_suggestion": spelling_suggestion,
             "spelling_suggestions": spelling_suggestions,
-            'raw_response': raw_results.raw_response
+            "raw_response": raw_results.raw_response if hasattr(raw_results, 'raw_response') else None
         }
 
     def extract_spelling_suggestions(self, raw_results):
